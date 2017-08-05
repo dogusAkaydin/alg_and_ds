@@ -1,6 +1,5 @@
 #! /opt/local/bin/python3
 
-
 def picker(d,k):
     return d[k]
 
