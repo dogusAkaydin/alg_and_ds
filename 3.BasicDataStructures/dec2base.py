@@ -37,7 +37,7 @@ def main():
 
 	print(dec2base(233,2))
 
-	print(dec2base(233,16))
+	print(dec2base(256,16))
 
 
 if __name__ == '__main__':
