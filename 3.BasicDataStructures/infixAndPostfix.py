@@ -22,7 +22,7 @@ def infix2postfix(infStr):
         if c in operands: # If you see a closing parenthesis ...
             psfExpr.append(c) #append it to the psf expression.
         elif c == oPar: # If you see an opening parenthesis ...
-            opStack.push(c) #push it onto the the stack.
+            opStack.push(c) #push it on the the stack.
         elif c == cPar: # If you see a closing parenthesis ...
             p = opStack.pop() # ... pop the stack & append until ... 
             while p != oPar: # the corresponding opening parenthesis is popped.              
@@ -43,20 +43,20 @@ def infix2postfix(infStr):
 
     return ''.join(psfExpr)
 
+def doMath(opnd1,opnd2,oprt):
+    if oprt == '*':
+        return opnd1 * opnd2
+    elif oprt == '/':
+        return opnd1 / opnd2
+    elif oprt == '+':
+        return opnd1 + opnd2
+    elif oprt == '-':
+        return opnd1 - opnd2
+
 def postfixEval(psfStr):
     """ Evaluate a postfix expression involving single-digit integers. """
 
     from pythonds.basic.stack import Stack
-
-    def doMath(opnd1,opnd2,oprt):
-        if oprt == '*':
-            return opnd1 * opnd2
-        elif oprt == '/':
-            return opnd1 / opnd2
-        elif oprt == '+':
-            return opnd1 + opnd2
-        elif oprt == '-':
-            return opnd1 - opnd2
     
     operands   = "0123456789"
     operators  = "*/+-"
@@ -75,7 +75,25 @@ def postfixEval(psfStr):
     return opStack.pop()
 
 def evalInfix(infStr):
-    pass
+    
+    from pythonds.basic.stack import Stack
+
+    operands   = "0123456789"
+    operators  = "*/+-"
+
+    opStack = Stack()
+
+    for c in infStr:
+        if c:
+            opStack.push(int(c))
+        if c in operators:
+            opnd2 = opStack.pop()
+            opnd1 = opStack.pop()
+            result = doMath(opnd1,opnd2,c) 
+            opStack.push(result)
+
+    return opStack.pop()
+
 
 def main():
 
@@ -87,7 +105,11 @@ def main():
     print(postfixEval(psfExpr))
 
     print(postfixEval('7 8 + 3 2 + /'))
-    
+
+    print(evalInfix('1+2+3'))
+
+
+    #Among the operators of the same precedence (* or /, + or -), the left one operates first: 1/2*3/4 = ((1/2)*3)/4
 
 if __name__ == '__main__':
     main()
