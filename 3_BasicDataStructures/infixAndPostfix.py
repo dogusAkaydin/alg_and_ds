@@ -74,23 +74,28 @@ def postfixEval(psfStr):
 
     return opStack.pop()
 
-def evalInfix(infStr):
+def evalInfix(s):
     
     from pythonds.basic.stack import Stack
 
-    operands   = "0123456789"
-    operators  = "*/+-"
+    opnd  = "0123456789"
+    oprt  = "*/+-()"
 
-    opStack = Stack()
+    oprtStack = Stack()
+    opndStack = Stack()
 
-    for c in infStr:
-        if c:
-            opStack.push(int(c))
-        if c in operators:
-            opnd2 = opStack.pop()
-            opnd1 = opStack.pop()
-            result = doMath(opnd1,opnd2,c) 
-            opStack.push(result)
+    while i < len(s):
+        if s[i] in opnd
+            opndStack.push(int(s[i]))
+        if s[i] in oprt:
+            if s[i] == '(':
+                oprtStack.push(s[i])
+                continue
+            if s[i] == '*' or s[i] == '/':
+                doMath()
+            else
+
+
 
     return opStack.pop()
 
@@ -108,8 +113,7 @@ def main():
 
     print(evalInfix('1+2+3'))
 
-
-    #Among the operators of the same precedence (* or /, + or -), the left one operates first: 1/2*3/4 = ((1/2)*3)/4
+    #Among the operators of the same precedence (* or /, + or -), the left one operates first: 1/2/3/4 = ((1/2)/3)/4 = (1/2)/3
 
 if __name__ == '__main__':
     main()

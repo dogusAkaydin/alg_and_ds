@@ -1,5 +1,3 @@
-#! /opt/local/bin/python3
-
 class Stack:
     """ My own stack implementation. """
     def __init__(self):

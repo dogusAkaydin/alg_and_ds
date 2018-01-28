@@ -1,0 +1,131 @@
+
+Direct infix evaluator - no pre-conversion to postfix.
+
+Test 1: No parentheses
+
+    print(infix2postfix("A + B / C * D - E + G - H * I - J"))
+
+    1) Read from left to right: read and push on the stack until an operator of high-precendence ( * or / ) is read. 
+       Read one more operand and push it on the stack.
+
+    A   B   C 
+      +   / 
+
+    2) Apply the last operator on the last two operands on the stack. Push the result on the stack.
+
+    A   B/C
+      +
+
+    3) Do Step 1 again
+
+    A   (B/C)    D
+      +       *
+
+    4) Do Step 2 again
+
+    A   (B/C)*D
+      + 
+
+    5) Do Step 1 again
+
+    A   (B/C)*D   E   G   H   I
+      +         -   +   -   *
+
+    6) Do Step 2 again:
+
+    A   (B/C)*D   E   G   H*I
+      +         -   +   - 
+
+    7) Do Step 1 again:
+
+    A   (B/C)*D   E   G   H*I   J
+      +         -   +   -     - 
+  
+    8) Do Step 2 again and realize that there is nothing else to read. 
+       Now pop an operator, pop two operands, do the math and push the result on the stack
+       Repeat until the operator stack is empty upon which you are left with only one element in the stack:
+
+    A   (B/C)*D   E   G   (H*I)-J
+      +         -   +   -  
+
+    A   (B/C)*D   E   G-(H*I)-J
+      +         -   +
+
+    A   (B/C)*D   E+G-(H*I)-J
+      +         -
+
+    A   (B/C)*D-E+G-(H*I)-J
+      +
+
+    A+(B/C)*D-E+G-(H*I)-J = Result
+
+Test 2: With parentheses
+
+    print(infix2postfix("A + B / C - D * (E - F * G / H + I) * (J - K)"))
+
+   1) Read from left to right: read until an operator of high-precendence ( * or -) is read. Read one more token.
+
+    A   B   C 
+      +   /
+
+   1.b) If the last read token is an ) then
+    Now pop an operator, pop two operands, do the math and push the result on the stack
+    Repeat until a ( is popped.
+
+   2.a) If the last read token is an operand push it on the stack. 
+        Then apply the last operator on the last two operands on the stack. Push the result on the stack.
+
+   2.b) If the last read token is an ( then go back to Step 1 
+
+    A   B/C   D     E   F  G    (Now 2.a is the case)
+      +     -   * (   -   *
+
+    A   B/C   D     E - F*G    
+      +     -   * (    -
+
+   3) Do Step 1 again:
+
+    A   B/C   D     E - F*G   H 
+      +     -   * (   -     /
+
+   4) Do step 2.a again:
+
+    A   B/C   D     E - F*G/H 
+      +     -   * (   - 
+
+   5) Do Step 1 again:
+
+    A   B/C   D     E - F*G/H   I
+      +     -   * (   -       +   )
+
+    WHAT IF YOU HAVE ( BEFORE D AND ) AFTER K) ? Do Step 1 again.
+
+Test 3: With parenteses - again:
+
+	A + B / C - (D * (E - F * G / H + I) * (J - K))
+
+	Stack until a ) is encountered: 
+
+	A   B   C     D     E   F   G   H   I
+	  +   /   - (   * (   -   *   /   +   )
+
+This does not work because operators of the same precedence need to be processed from left to right
+When all is stacked until a ) then you need to pop and bookeep until the leftmost such operator is found. 
+E.g. You need to pop back until F to go the past * between F and G. You have to keep looking way back.
+
+Test 4: With parantheses - again:
+
+Keep stacking until you encounter a *, / or (
+
+If you encounter a * or /, read one more. 
+   If it's an operand, do the math and push the result. 
+   If it's an (, keep reading ...
+       WHEN you encounter a ) then pop and process back until you pop the previous ( back.
+ 
+If you encounter a ( keep reading ... like above.
+
+
+
+
+
+
